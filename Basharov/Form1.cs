@@ -3,9 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +26,8 @@ namespace Basharov
         PictureBox picture;
         TabControl tabControl;
         TabPage page1, page2, page3;
+        ListBox lbox;
+        DataGridView dgv;
         public Form1()
         {
             this.Height = 500;
@@ -49,7 +53,9 @@ namespace Basharov
             tn.Nodes.Add(new TreeNode("Pildikast-PictureBox"));
             tn.Nodes.Add(new TreeNode("Kaart-TabControl"));
             tn.Nodes.Add(new TreeNode("MessageBox"));
-
+            tn.Nodes.Add(new TreeNode("ListBox"));
+            tn.Nodes.Add(new TreeNode("DataGridView"));
+            tn.Nodes.Add(new TreeNode("Menu"));
             tree.Nodes.Add(tn);
             this.Controls.Add(tree);
 
@@ -104,7 +110,7 @@ namespace Basharov
             {
                 txt_box = new TextBox();
                 txt_box.Multiline = true;
-                txt_box.Text = "Wryyyyyyyyyyyyy";
+                txt_box.Text = "Wryyyyyyyyyyy";
                 txt_box.Location = new Point(300, 300);
                 txt_box.Width = 100;
                 txt_box.Height = 100;
@@ -126,7 +132,7 @@ namespace Basharov
             {
                 tabControl = new TabControl();
                 tabControl.Location = new Point(500, 500);
-                tabControl.Size = new Size(600, 600);
+                tabControl.Size = new Size(200, 200);
                 page1 = new TabPage("Esimene");
                 page2 = new TabPage("Teine");
                 page3 = new TabPage("Kolmas");
@@ -136,6 +142,7 @@ namespace Basharov
                 tabControl.Controls.Add(page3);
                 tabControl.SelectedIndex = 0;
                 page1.BackColor = Color.FromArgb(255, 232, 232);
+                page2.BackColor = Color.FromArgb(255, 221, 240);
             }
             else if (e.Node.Text == "MessageBox")
             {
@@ -144,14 +151,58 @@ namespace Basharov
 
                 if (answer == DialogResult.Yes)
                 {
-                    string text=Interaction.InputBox("Sisesta siia mingi tekst","InputBox","Mingi tekst");
-                    if (MessageBox.Show("Kas tahad tekst saada Tekskastisse?","Teksti salvestamine", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                    string text = Interaction.InputBox("Sisesta siia mingi tekst", "InputBox", "Mingi tekst");
+                    if (MessageBox.Show("Kas tahad tekst saada Tekskastisse?", "Teksti salvestamine", MessageBoxButtons.OKCancel) == DialogResult.OK)
                     {
                         lbl.Text = text;
                         Controls.Add(lbl);
                     }
                 }
-                
+
+            }
+            else if (e.Node.Text == "ListBox")
+            {
+                string[] Colors_nimetused = new string[] { "Sinine", "Kollane", "Roheline", "Punane" };
+                lbox = new ListBox();
+                foreach (var item in Colors_nimetused)
+                {
+                    lbox.Items.Add(item);
+                }
+                lbox.Location = new Point(150, 300);
+                lbox.Width = 50;
+                lbox.Height = Colors_nimetused.Length * 16;
+                this.Controls.Add(lbox);
+            }
+            else if (e.Node.Text == "DataGridView")
+            {
+                DataSet dataSet = new DataSet("Näide");
+                dataSet.ReadXml("..//..//Files//example.xml");
+                DataGridView dgv = new DataGridView();
+                dgv.Location = new Point(200, 200);
+                dgv.Width = 250;
+                dgv.Height = 250;
+                dgv.AutoGenerateColumns = true;
+                dgv.DataMember = "FOOD";
+                dgv.DataSource = dataSet;
+                Controls.Add(dgv);
+
+
+            }
+            else if (e.Node.Text == "Menu")
+            {
+                MainMenu menu = new MainMenu();
+                MenuItem menuitem1 = new MenuItem("File");
+                menuitem1.MenuItems.Add("Exit", new EventHandler(menuitem1_Exit));
+                menu.MenuItems.Add(menuitem1);
+                this.Menu = menu;
+            }
+        }
+
+        private void menuitem1_Exit(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Kas sa oled kindal?","Küsimus",MessageBoxButtons.YesNo)==DialogResult.Yes)
+            {
+                this.Dispose();
             }
         }
 
@@ -166,7 +217,6 @@ namespace Basharov
                 btn.Location = new Point(400, 100);
             }
         }
-
         private void Box_lbl_CheckedChanged(object sender, EventArgs e)
         {
             if (box_lbl.Checked)
