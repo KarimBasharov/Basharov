@@ -109,8 +109,6 @@ namespace Basharov
             }
             else if (e.Node.Text == "Tekstkast-TextBox")
             {
-                //text = File.ReadAllText(@"C:\Users\karim\source\repos\Basharov\Dio.txt");
-                //txt_box.Text = File.ReadAllText(@"C:\Users\karim\source\repos\Basharov\Dio.txt");
                 txt_box = new TextBox();
                 txt_box.Multiline = true;
                 txt_box.Text = "Wry";
@@ -270,10 +268,6 @@ namespace Basharov
             if (selectt == "Punane")
             {
                 lbox.BackColor = Color.Red;
-            }
-            if (selectt == "Pruun")
-            {
-                lbox.BackColor = Color.Brown;
             }
         }
 
