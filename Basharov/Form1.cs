@@ -6,6 +6,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Security.Cryptography;
@@ -27,7 +28,6 @@ namespace Basharov
         TabControl tabControl;
         TabPage page1, page2, page3;
         ListBox lbox;
-        DataGridView dgv;
         public Form1()
         {
             this.Height = 500;
@@ -57,6 +57,7 @@ namespace Basharov
             tn.Nodes.Add(new TreeNode("DataGridView"));
             tn.Nodes.Add(new TreeNode("Menu"));
             tree.Nodes.Add(tn);
+            MenuItem menuitem1 = new MenuItem("File");
             this.Controls.Add(tree);
 
         }
@@ -108,12 +109,19 @@ namespace Basharov
             }
             else if (e.Node.Text == "Tekstkast-TextBox")
             {
+                //text = File.ReadAllText(@"C:\Users\karim\source\repos\Basharov\Dio.txt");
+                //txt_box.Text = File.ReadAllText(@"C:\Users\karim\source\repos\Basharov\Dio.txt");
                 txt_box = new TextBox();
                 txt_box.Multiline = true;
-                txt_box.Text = "Wryyyyyyyyyyy";
+                txt_box.Text = "Wry";
                 txt_box.Location = new Point(300, 300);
                 txt_box.Width = 100;
                 txt_box.Height = 100;
+                using (var sr = new StreamReader(@"C:\Users\karim\source\repos\Basharov\Dio.txt"))
+                {
+                    var str = sr.ReadToEnd();
+                    txt_box.Text = str.ToString();
+                }
                 this.Controls.Add(txt_box);
 
 
@@ -121,9 +129,9 @@ namespace Basharov
             else if (e.Node.Text == "Pildikast-PictureBox")
             {
                 picture = new PictureBox();
-                picture.Image = new Bitmap("giphy.gif");
-                picture.Location = new Point(400, 400);
-                picture.Size = new Size(100, 100);
+                picture.Image = new Bitmap("mops.gif");
+                picture.Location = new Point(900, 200);
+                picture.Size = new Size(450, 450);
                 picture.SizeMode = PictureBoxSizeMode.Zoom;
                 picture.BorderStyle = BorderStyle.Fixed3D;
                 this.Controls.Add(picture);
@@ -171,20 +179,21 @@ namespace Basharov
                 lbox.Location = new Point(150, 300);
                 lbox.Width = 50;
                 lbox.Height = Colors_nimetused.Length * 16;
+                lbox.SelectedValueChanged += Lbox_SelectedValueChanged;
                 this.Controls.Add(lbox);
             }
             else if (e.Node.Text == "DataGridView")
             {
                 DataSet dataSet = new DataSet("Näide");
-                dataSet.ReadXml("..//..//Files//example.xml");
+                dataSet.ReadXml("..//..//cdproject.xml");
                 DataGridView dgv = new DataGridView();
-                dgv.Location = new Point(200, 200);
+                dgv.Location = new Point(600, 200);
                 dgv.Width = 250;
                 dgv.Height = 250;
                 dgv.AutoGenerateColumns = true;
-                dgv.DataMember = "FOOD";
+                dgv.DataMember = "CD";
                 dgv.DataSource = dataSet;
-                Controls.Add(dgv);
+                this.Controls.Add(dgv);
 
 
             }
@@ -193,11 +202,11 @@ namespace Basharov
                 MainMenu menu = new MainMenu();
                 MenuItem menuitem1 = new MenuItem("File");
                 menuitem1.MenuItems.Add("Exit", new EventHandler(menuitem1_Exit));
+                menuitem1.MenuItems.Add("Restart", new EventHandler(menuitem1_Restart));
                 menu.MenuItems.Add(menuitem1);
                 this.Menu = menu;
             }
         }
-
         private void menuitem1_Exit(object sender, EventArgs e)
         {
             if (MessageBox.Show("Kas sa oled kindal?","Küsimus",MessageBoxButtons.YesNo)==DialogResult.Yes)
@@ -205,7 +214,10 @@ namespace Basharov
                 this.Dispose();
             }
         }
-
+        private void menuitem1_Restart(object sender, EventArgs e)
+        {
+             Application.Restart();
+        }
         private void Radiobuttons_Changed(object sender, EventArgs e)
         {
             if (r1.Checked)
@@ -240,6 +252,31 @@ namespace Basharov
                 Controls.Remove(btn);
             }
         }
+        private void Lbox_SelectedValueChanged(object sender, EventArgs e)
+        {
+            var selectt = lbox.SelectedItem;
+            if (selectt == "Sinine")
+            {
+                lbox.BackColor = Color.Blue;
+            }
+            if (selectt == "Roheline")
+            {
+                lbox.BackColor = Color.Green;
+            }
+            if (selectt == "Kollane")
+            {
+                lbox.BackColor = Color.Yellow;
+            }
+            if (selectt == "Punane")
+            {
+                lbox.BackColor = Color.Red;
+            }
+            if (selectt == "Pruun")
+            {
+                lbox.BackColor = Color.Brown;
+            }
+        }
+
 
         private void Btn_Click(object sender, EventArgs e)
         {
